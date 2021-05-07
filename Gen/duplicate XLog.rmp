@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.2.001">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="7.2.001" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="rapidprom:import_xlog" compatibility="4.0.001" expanded="true" height="68" name="Import Event Log" width="90" x="45" y="136">
+        <parameter key="file" value="C:\Users\lcheng\Desktop\decomp\prAm6.xes.gz"/>
+        <parameter key="importer" value="Naive"/>
+      </operator>
+      <operator activated="true" class="remember" compatibility="7.2.001" expanded="true" height="68" name="Remember" width="90" x="179" y="136">
+        <parameter key="name" value="log"/>
+        <parameter key="io_object" value="XLogIOObject"/>
+        <parameter key="store_which" value="1"/>
+        <parameter key="remove_from_process" value="true"/>
+      </operator>
+      <operator activated="true" class="loop" compatibility="7.2.001" expanded="true" height="68" name="Loop" width="90" x="313" y="136">
+        <parameter key="set_iteration_macro" value="false"/>
+        <parameter key="macro_name" value="iteration"/>
+        <parameter key="macro_start_value" value="1"/>
+        <parameter key="iterations" value="32"/>
+        <parameter key="limit_time" value="false"/>
+        <parameter key="timeout" value="1"/>
+        <process expanded="true">
+          <operator activated="true" class="rapidprom:import_xlog" compatibility="4.0.001" expanded="true" height="68" name="Import Event Log (2)" width="90" x="112" y="187">
+            <parameter key="file" value="C:\Users\lcheng\Desktop\decomp\prAm6.xes.gz"/>
+            <parameter key="importer" value="Naive"/>
+          </operator>
+          <operator activated="true" class="recall" compatibility="7.2.001" expanded="true" height="68" name="Recall" width="90" x="112" y="85">
+            <parameter key="name" value="log"/>
+            <parameter key="io_object" value="XLogIOObject"/>
+            <parameter key="remove_from_store" value="true"/>
+          </operator>
+          <operator activated="true" class="rapidprom:merge_two_event_logs" compatibility="4.0.001" expanded="true" height="82" name="Merge Event Logs" width="90" x="380" y="85">
+            <parameter key="Merge traces with same identifier" value="false"/>
+          </operator>
+          <operator activated="true" class="remember" compatibility="7.2.001" expanded="true" height="68" name="Remember (2)" width="90" x="581" y="85">
+            <parameter key="name" value="log"/>
+            <parameter key="io_object" value="XLogIOObject"/>
+            <parameter key="store_which" value="1"/>
+            <parameter key="remove_from_process" value="true"/>
+          </operator>
+          <connect from_op="Import Event Log (2)" from_port="output" to_op="Merge Event Logs" to_port="event log 2 (ProM Event Log)"/>
+          <connect from_op="Recall" from_port="result" to_op="Merge Event Logs" to_port="event log 1 (ProM Event Log)"/>
+          <connect from_op="Merge Event Logs" from_port="event log (ProM Event Log)" to_op="Remember (2)" to_port="store"/>
+          <portSpacing port="source_input 1" spacing="0"/>
+          <portSpacing port="sink_output 1" spacing="0"/>
+        </process>
+      </operator>
+      <operator activated="true" class="recall" compatibility="7.2.001" expanded="true" height="68" name="Recall (2)" width="90" x="447" y="136">
+        <parameter key="name" value="log"/>
+        <parameter key="io_object" value="XLogIOObject"/>
+        <parameter key="remove_from_store" value="false"/>
+      </operator>
+      <operator activated="true" class="rapidprom:add_noise_log" compatibility="4.0.001" expanded="true" height="68" name="Add Noise" width="90" x="581" y="136">
+        <parameter key="Noise Percentage" value="0.075"/>
+        <parameter key="Noise Type" value="Add Event"/>
+        <parameter key="Seed" value="1"/>
+      </operator>
+      <operator activated="true" class="recall" compatibility="7.2.001" expanded="true" height="68" name="Recall (3)" width="90" x="447" y="238">
+        <parameter key="name" value="log"/>
+        <parameter key="io_object" value="XLogIOObject"/>
+        <parameter key="remove_from_store" value="false"/>
+      </operator>
+      <operator activated="true" class="rapidprom:add_noise_log" compatibility="4.0.001" expanded="true" height="68" name="Add Noise (2)" width="90" x="581" y="238">
+        <parameter key="Noise Percentage" value="0.075"/>
+        <parameter key="Noise Type" value="Remove Task"/>
+        <parameter key="Seed" value="1"/>
+      </operator>
+      <operator activated="true" class="recall" compatibility="7.2.001" expanded="true" height="68" name="Recall (4)" width="90" x="447" y="340">
+        <parameter key="name" value="log"/>
+        <parameter key="io_object" value="XLogIOObject"/>
+        <parameter key="remove_from_store" value="true"/>
+      </operator>
+      <operator activated="true" class="rapidprom:add_noise_log" compatibility="4.0.001" expanded="true" height="68" name="Add Noise (3)" width="90" x="581" y="340">
+        <parameter key="Noise Percentage" value="0.075"/>
+        <parameter key="Noise Type" value="Swap Tasks"/>
+        <parameter key="Seed" value="1"/>
+      </operator>
+      <operator activated="true" class="rapidprom:merge_two_event_logs" compatibility="4.0.001" expanded="true" height="82" name="Merge Event Logs (2)" width="90" x="715" y="187">
+        <parameter key="Merge traces with same identifier" value="false"/>
+      </operator>
+      <operator activated="true" class="rapidprom:merge_two_event_logs" compatibility="4.0.001" expanded="true" height="82" name="Merge Event Logs (3)" width="90" x="849" y="289">
+        <parameter key="Merge traces with same identifier" value="false"/>
+      </operator>
+      <operator activated="true" class="rapidprom:import_xlog" compatibility="4.0.001" expanded="true" height="68" name="Import Event Log (3)" width="90" x="45" y="442">
+        <parameter key="file" value="C:\Users\lcheng\Desktop\decomp\prAm6.xes.gz"/>
+        <parameter key="importer" value="Naive"/>
+      </operator>
+      <operator activated="true" class="rapidprom:merge_two_event_logs" compatibility="4.0.001" expanded="true" height="82" name="Merge Event Logs (4)" width="90" x="983" y="391">
+        <parameter key="Merge traces with same identifier" value="false"/>
+      </operator>
+      <operator activated="true" class="rapidprom:export_log" compatibility="4.0.001" expanded="true" height="68" name="Export Event Log" width="90" x="1050" y="136">
+        <parameter key="folder" value="C:\Users\lcheng\Desktop"/>
+        <parameter key="file_name" value="100_075"/>
+        <parameter key="file_format" value="xes.gz"/>
+      </operator>
+      <connect from_op="Import Event Log" from_port="output" to_op="Remember" to_port="store"/>
+      <connect from_op="Recall (2)" from_port="result" to_op="Add Noise" to_port="event log (ProM Event Log)"/>
+      <connect from_op="Add Noise" from_port="event log (ProM Event Log)" to_op="Merge Event Logs (2)" to_port="event log 1 (ProM Event Log)"/>
+      <connect from_op="Recall (3)" from_port="result" to_op="Add Noise (2)" to_port="event log (ProM Event Log)"/>
+      <connect from_op="Add Noise (2)" from_port="event log (ProM Event Log)" to_op="Merge Event Logs (2)" to_port="event log 2 (ProM Event Log)"/>
+      <connect from_op="Recall (4)" from_port="result" to_op="Add Noise (3)" to_port="event log (ProM Event Log)"/>
+      <connect from_op="Add Noise (3)" from_port="event log (ProM Event Log)" to_op="Merge Event Logs (3)" to_port="event log 2 (ProM Event Log)"/>
+      <connect from_op="Merge Event Logs (2)" from_port="event log (ProM Event Log)" to_op="Merge Event Logs (3)" to_port="event log 1 (ProM Event Log)"/>
+      <connect from_op="Merge Event Logs (3)" from_port="event log (ProM Event Log)" to_op="Merge Event Logs (4)" to_port="event log 1 (ProM Event Log)"/>
+      <connect from_op="Import Event Log (3)" from_port="output" to_op="Merge Event Logs (4)" to_port="event log 2 (ProM Event Log)"/>
+      <connect from_op="Merge Event Logs (4)" from_port="event log (ProM Event Log)" to_op="Export Event Log" to_port="input"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+    </process>
+  </operator>
+</process>
