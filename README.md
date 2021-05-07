@@ -29,7 +29,7 @@ Test code for Computing Optimal Alignments
   
 3, How to set Spark, please refer to http://spark.apache.org/.
 
-4, If any questions, please email to long.cheng(AT)ucd.ie
+4, If any questions, please email to cheng03(AT)ieee.org
 
 ### License
 
